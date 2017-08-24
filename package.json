@@ -1,7 +1,7 @@
 {
   "name": "pce-virtual-lab",
   "author": "Jose A. Jimenez-Berni",
-  "license": "MIT",
+  "license": "Apache License 2.0",
   "repository": {
     "type": "git",
     "url": "http://github.com/jajberni/pcse_web"
