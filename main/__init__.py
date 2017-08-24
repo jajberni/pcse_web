@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-gae-angular-material-init
+pce-virtual-lab
 ~~~~~~~~
 
 Fastest way to start Google App Engine Angular Material project on Earth & Mars!

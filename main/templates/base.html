@@ -29,7 +29,7 @@
 # block scripts
 # endblock
 <script type="text/javascript">
-    var module = angular.module('gae-angular-material-init');
+    var module = angular.module('pce-virtual-lab');
     module.value('gaAuthenticatedUser', {{ user | tojson | safe }});
     module.value('gaAppConfig', {{ app_config | tojson | safe }});
     module.value('gaFlashMessages', {{ get_flashed_messages() | tojson | safe }});

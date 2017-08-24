@@ -6,7 +6,7 @@
 var AppConfig = (function() {
     'use strict';
     // Init module configuration options
-    var applicationModuleName = 'gae-angular-material-init';
+    var applicationModuleName = 'pce-virtual-lab';
     var applicationModuleVendorDependencies = [
         'ngAnimate',
         'ngMessages',

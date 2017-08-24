@@ -8,7 +8,7 @@
     var del = require('del');
     var exec = require('child_process').exec;
     var inject = require('gulp-inject');
-    var uglify = require('gulp-uglifyjs');
+    var concat = require('gulp-concat');
     var less = require('gulp-less');
     var minifyCSS = require('gulp-clean-css');
     var concatCss = require('gulp-concat-css');
@@ -47,12 +47,12 @@
             'lib/angular-animate/angular-animate.js',
             'lib/angular-messages/angular-messages.js',
             'lib/angular-aria/angular-aria.js',
+            'lib/lodash/lodash.js',
             'lib/restangular/dist/restangular.js',
             'lib/angular-no-captcha/src/angular-no-captcha.js',
             'lib/angular-material/angular-material.js',
-            'lib/lodash/lodash.js',
-            'lib/angulartics/src/angulartics.js',
-            'lib/angulartics/src/angulartics-ga.js',
+            'lib/angulartics/dis/angulartics.min.js',
+            'lib/angulartics-google-analytics/dist/angulartics-ga.min.js',
             'lib/moment/moment.js',
             'lib/moment-timezone/builds/moment-timezone-with-data.js',
             'lib/angular-moment/angular-moment.js',
@@ -114,10 +114,10 @@
     gulp.task('uglify', ['less'], function() {
         gulp.src(jsFiles.lib, {
             cwd : publicDir
-        }).pipe(uglify('libs.min.js')).pipe(gulp.dest(distDir));
+        }).pipe(concat('libs.min.js')).pipe(gulp.dest(distDir));
         gulp.src(jsFiles.scripts, {
             cwd : publicDir
-        }).pipe(ngAnnotate()).pipe(uglify('scripts.min.js')).pipe(gulp.dest(distDir));
+        }).pipe(ngAnnotate()).pipe(concat('scripts.min.js')).pipe(gulp.dest(distDir));
         gulp.src('style.css', {
             cwd : distDir
         }).pipe(minifyCSS()).pipe(rename({
