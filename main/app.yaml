@@ -1,4 +1,4 @@
-application: gae-angular-material-init
+application: pce_web
 version: alpha-001
 runtime: python27
 api_version: 1
