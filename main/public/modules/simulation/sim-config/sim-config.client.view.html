@@ -1,0 +1,132 @@
+<form name="simConfigForm" layout-fill flex>
+    <md-tabs md-selected="tabIndex" class="sim-config-content">
+        <md-tab label="Simulation Description">
+            <md-content layout-padding layout="column">
+                <md-input-container>
+                    <label>Simulation Name</label>
+                    <input ng-model="sim.name"
+                           tabindex="1"
+                           name="sim_name"
+                           required>
+                </md-input-container>
+
+               <md-autocomplete
+                   ng-model="sim.location"
+                   md-selected-item = "sim.locationRaw"
+                   ga-autocomplete-location
+                   md-select-on-focus
+                   md-floating-label="Location"
+                   tabindex="2">
+                </md-autocomplete>
+
+                <md-input-container>
+                    <label>Description</label>
+                    <textarea ng-model="sim.description"
+                           tabindex="3"
+                           name="description"
+                           ></textarea>
+                </md-input-container>
+
+
+            </md-content>
+        </md-tab>
+        <md-tab label="Soil">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+               <md-input-container>
+                    <label>Soil Type</label>
+                    <input ng-model="sim.soil_name"
+                           tabindex="1"
+                           name="soil_name"
+                           required>
+                </md-input-container>
+
+            </md-content>
+        </md-tab>
+        <md-tab label="Weather">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+                <md-input-container>
+                    <label>Closest Weather Station</label>
+                    <input ng-model="sim.weather_station"
+                           tabindex="1"
+                           name="weather_station">
+                </md-input-container>
+
+                <div>Pick one from:
+                    <a target="_blank" href="https://www.juntadeandalucia.es/agriculturaypesca/ifapa/ria/servlet/FrontController">Estaciones Agroclimáticas Andalucía</a>
+
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="Crop">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+
+                <div layout="row" layout-align="space-between center">
+                  <span>Crop Species</span>
+                  <md-select ng-model="sim.crop_name" placeholder="Crop" class="md-no-underline" required md-no-asterisk="false" tabindex="1">
+                    <md-option value="wheat">Wheat</md-option>
+                    <md-option value="maize">Maize</md-option>
+                    <md-option value="sunflower">Sunflower</md-option>
+                    <md-option value="barley">Barley</md-option>
+                  </md-select>
+                </div>
+
+
+                <md-slider-container>
+                  <label>Thermal time to Flowering</label>
+                  <md-icon md-svg-icon="device:brightness-low"></md-icon>
+                  <md-slider aria-label="Thermal time to flowering" ng-model="tsum1" flex md-discrete
+                  step="10" min="600" max="1500" id="tsum1-slider"></md-slider>
+
+                  <md-input-container>
+                    <input flex type="number" ng-model="tsum1" aria-label="tsum1" aria-controls="tsum1-slider">
+                  </md-input-container>
+
+                </md-slider-container>
+
+                <md-slider-container>
+                  <label>Thermal time to Maturity</label>
+                  <md-icon md-svg-icon="device:brightness-low"></md-icon>
+                  <md-slider aria-label="Thermal time to maturity" ng-model="tsum2" flex md-discrete
+                  step="10" min="600" max="1500" id="tsum2-slider"></md-slider>
+
+                  <md-input-container>
+                    <input flex type="number" ng-model="tsum2" aria-label="tsum2" aria-controls="tsum2-slider">
+                  </md-input-container>
+
+                </md-slider-container>
+
+            </md-content>
+        </md-tab>
+        <md-tab label="Management">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+              <div flex-gt-xs>
+                <h4>Sowing Date</h4>
+                <md-datepicker ng-model="sim.sowing_date"
+                               md-placeholder="Enter date"
+                               tabindex="1"
+                               name="sowing_date" md-current-view="year"></md-datepicker>
+              </div>
+
+
+            </md-content>
+        </md-tab>
+    </md-tabs>
+    <md-content class="md-padding pad-top-0" layout="row" layout-margin>
+        <md-button class="md-primary"
+                   flex
+                   type="submit"
+                   ng-disabled="!simConfigForm.$valid || !simConfigForm.$dirty || isLoading"
+                   ng-click="run()">Run Simulation
+        </md-button>
+    </md-content>
+</form>

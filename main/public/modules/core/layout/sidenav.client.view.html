@@ -22,7 +22,7 @@
         <md-icon md-svg-icon="close" class="" ></md-icon>
         </md-button>
        </div>
-	</md-toolbar> 
+	</md-toolbar>
 	<md-content >
 
 <md-list>
@@ -30,6 +30,14 @@
   <md-list-item ui-sref="admin.appConfig" ui-sref-active="list-active">
         <md-icon md-svg-icon="settings" class="list-icon-fix" ></md-icon>
         <span>App Config</span>
+  </md-list-item>
+        <md-divider></md-divider>
+    </div>
+
+  <div ng-if="auth.isLogged()">
+  <md-list-item ui-sref="simulation.simConfig" ui-sref-active="list-active">
+        <md-icon md-svg-icon="settings" class="list-icon-fix" ></md-icon>
+        <span>Simulation Config</span>
   </md-list-item>
         <md-divider></md-divider>
     </div>
