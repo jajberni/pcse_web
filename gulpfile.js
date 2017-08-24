@@ -1,7 +1,7 @@
 (function() {
     var gulp = require('gulp');
     require('gulp-grunt')(gulp);
-    var moduleName = "gae-angular-material-init"
+    var moduleName = "pce-virtual-lab"
 
     var $ = require('gulp-load-plugins')();
     var watch = require('gulp-watch');
