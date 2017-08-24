@@ -1,0 +1,67 @@
+<div data-ng-controller="SidenavController">
+    <!--
+    <md-toolbar>
+    <div layout="row" layout-align="center center" class="md-toolbar-tools">
+        <h1 class="nowrap">
+            <a ui-sref="home" tabindex="-1">
+                <span class="f-400">{{ cfg.brand_name }}</span>
+            </a>
+        </h1>
+    </div>
+    </md-toolbar>
+    <md-content class="sidenav-content">
+    -->
+
+	<md-toolbar layout="row">
+	 <div class="md-toolbar-tools">
+            <a ui-sref="home" tabindex="-1">
+                <span class="f-400">{{ cfg.brand_name }}</span>
+            </a>
+        <span flex></span>
+        <md-button class="md-icon-button" hide-gt-md ng-click="closeSidenav()" aria-label="Close Side Panel">
+        <md-icon md-svg-icon="close" class="" ></md-icon>
+        </md-button>
+       </div>
+	</md-toolbar> 
+	<md-content >
+
+<md-list>
+    <div ng-if="auth.isAdmin()">
+  <md-list-item ui-sref="admin.appConfig" ui-sref-active="list-active">
+        <md-icon md-svg-icon="settings" class="list-icon-fix" ></md-icon>
+        <span>App Config</span>
+  </md-list-item>
+        <md-divider></md-divider>
+    </div>
+
+  <md-list-item ng-show="auth.isLogged()" ui-sref="profile.view({username: auth.user.username})" ng-click="" ui-sref-active="list-active">
+    <md-icon md-svg-icon="account-circle" class="list-icon-fix"></md-icon>
+    My Profile
+  </md-list-item>
+  <md-list-item  ng-hide="auth.isLogged()" ui-sref="signin" ng-click="" ui-sref-active="list-active">
+    <md-icon md-svg-icon="login" class="list-icon-fix"></md-icon>
+    Sign In
+  </md-list-item>
+  <md-list-item  ng-hide="auth.isLogged()" ui-sref="signup" ng-click="" ui-sref-active="list-active">
+    <md-icon md-svg-icon="account-plus" class="list-icon-fix"></md-icon>
+    Sign Up
+  </md-list-item>
+  <md-list-item  ui-sref="users" ng-click="" ui-sref-active="list-active">
+    <md-icon md-svg-icon="account-multiple" class="list-icon-fix"></md-icon>
+    Users
+  </md-list-item>
+  <md-list-item  ng-show="cfg.has_feedback_form" ui-sref="feedback" ng-click="" ui-sref-active="list-active">
+    <md-icon md-svg-icon="comment" class="list-icon-fix"></md-icon>
+    Feedback
+  </md-list-item>
+  <md-list-item  ng-show="cfg.development" ng-click="generateDatabase()" >
+    <md-icon md-svg-icon="database-plus" class="list-icon-fix"></md-icon>
+    Generate Database
+  </md-list-item>
+  <md-list-item  ng-show="auth.isLogged()" ui-sref="signout" class="md-warn" ng-click="" ui-sref-active="list-active">
+    <md-icon md-svg-icon="logout" class="list-icon-fix"></md-icon>
+    Sign Out
+  </md-list-item>
+</md-list>
+</md-content>
+</div>

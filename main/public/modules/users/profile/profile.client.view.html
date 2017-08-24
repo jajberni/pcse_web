@@ -1,0 +1,16 @@
+<div layout="row" layout-fill layout-align="center start">
+    <div flex-sm="80" flex-md="60" flex-gt-md="55" flex md-whiteframe="1">
+        <md-content class="no-overflow" layout="column" layout-align="start center" layout-padding>
+            <a ui-sref="profile.view({username: user.username})" class="profile-pic-large" layout-align="center center" layout="row" >
+                <img ng-if="!avatar && !avatarChanged" class="profile-pic-large" ng-src="{{user.avatar_url}}"/>
+                <md-progress-circular ng-if="!avatar && avatarChanged" md-mode="indeterminate"></md-progress-circular>
+                <img ng-if="avatar" class="profile-pic-large" ngf-src="avatar"/>
+
+            </a>
+            <a ui-sref="profile.view({username: user.username})" class="no-dec">
+                <h2 class="mar-bot-0">{{ user.username }}</h2>
+            </a>
+            <div class="profile-view w-100" ui-view></div>
+        </md-content>
+    </div>
+</div>
