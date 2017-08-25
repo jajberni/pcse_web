@@ -25,10 +25,9 @@ class UsersAPI(Resource):
     def get(self):
         parser = default_parser()
         args = parser.parse_args()
-        compare ,date = to_compare_date(args.newer, args.older, args.orderBy)
+        compare, date = to_compare_date(args.newer, args.older, args.orderBy)
 
-        users_query = User.qry(order_by_date=args.orderBy,  \
-            compare_date = compare, date = date, time_offset=args.offset)
+        users_query = User.qry(order_by_date=args.orderBy, compare_date=compare, date=date, time_offset=args.offset)
         users_future = users_query.fetch_page_async(args.size, start_cursor=args.cursor)
 
         total_count_future = users_query.count_async(keys_only=True) if args.total else False
@@ -55,6 +54,25 @@ class UserByKeyAPI(Resource):
     @authorization_required
     @model_by_key
     def put(self, key):
+        """Updates user's properties"""
+        update_properties = ['name', 'bio', 'email', 'location', 'avatar_url', 'facebook', 'github',
+                             'gplus', 'linkedin', 'twitter', 'instagram']
+        if auth.is_admin():
+            update_properties += ['verified', 'active', 'admin']
+
+        new_data = _.pick(request.json, update_properties)
+        g.model_db.populate(**new_data)
+        g.model_db.put()
+        #return make_empty_ok_response()
+        if auth.is_admin():
+            properties = User.get_private_properties()
+        else:
+            properties = User.get_public_properties()
+        return g.model_db.to_dict(include=properties)
+
+    @authorization_required
+    @model_by_key
+    def post(self, key):
         """Updates user's properties"""
         update_properties = ['name', 'bio', 'email', 'location', 'avatar_url', 'facebook', 'github',
                              'gplus', 'linkedin', 'twitter', 'instagram']

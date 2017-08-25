@@ -66,42 +66,46 @@
                         md-swipe-left="next()"
                         md-swipe-right="previous()">
 
+              <div layout="row" layout-wrap>
 
-                <div layout="row" layout-align="space-between center">
-                  <span>Crop Species</span>
-                  <md-select ng-model="sim.crop_name" placeholder="Crop" class="md-no-underline" required md-no-asterisk="false" tabindex="1">
-                    <md-option value="wheat">Wheat</md-option>
-                    <md-option value="maize">Maize</md-option>
-                    <md-option value="sunflower">Sunflower</md-option>
-                    <md-option value="barley">Barley</md-option>
-                  </md-select>
-                </div>
+                  <div flex="50">
+                    <span flex="50">Crop Species: </span>
+                  </div>
+                  <div flex="50">
+                    <md-select flex="50" ng-model="sim.crop_name" placeholder="Crop" class="md-no-underline" required md-no-asterisk="false" tabindex="1">
+                      <md-option value="wheat">Wheat</md-option>
+                      <md-option value="maize">Maize</md-option>
+                      <md-option value="sunflower">Sunflower</md-option>
+                      <md-option value="barley">Barley</md-option>
+                    </md-select>
+                  </div>
 
+                  <div flex="30">
+                    <span class="md-body-1">Thermal time to Flowering</span>
+                  </div>
+                  <div flex="50">
+                    <md-slider md-discrete ng-model="tsum1" step="10" min="600" max="1500" aria-label="tsum1" aria-controls="tsum1-slider">
+                    </md-slider>
+                  </div>
+                  <div flex="10">
+                    <md-input-container>
+                      <input flex type="number" ng-model="tsum1" aria-label="tsum1" aria-controls="tsum1-slider">
+                    </md-input-container>
+                  </div>
 
-                <md-slider-container>
-                  <label>Thermal time to Flowering</label>
-                  <md-icon md-svg-icon="device:brightness-low"></md-icon>
-                  <md-slider aria-label="Thermal time to flowering" ng-model="tsum1" flex md-discrete
-                  step="10" min="600" max="1500" id="tsum1-slider"></md-slider>
-
-                  <md-input-container>
-                    <input flex type="number" ng-model="tsum1" aria-label="tsum1" aria-controls="tsum1-slider">
-                  </md-input-container>
-
-                </md-slider-container>
-
-                <md-slider-container>
-                  <label>Thermal time to Maturity</label>
-                  <md-icon md-svg-icon="device:brightness-low"></md-icon>
-                  <md-slider aria-label="Thermal time to maturity" ng-model="tsum2" flex md-discrete
-                  step="10" min="600" max="1500" id="tsum2-slider"></md-slider>
-
-                  <md-input-container>
-                    <input flex type="number" ng-model="tsum2" aria-label="tsum2" aria-controls="tsum2-slider">
-                  </md-input-container>
-
-                </md-slider-container>
-
+                  <div flex="30">
+                    <span class="md-body-1">Thermal time to Maturity</span>
+                  </div>
+                  <div flex="50">
+                    <md-slider md-discrete ng-model="tsum2" step="10" min="600" max="1500" aria-label="tsum2" aria-controls="tsum2-slider">
+                    </md-slider>
+                  </div>
+                  <div flex="10">
+                    <md-input-container>
+                      <input flex type="number" ng-model="tsum2" aria-label="tsum2" aria-controls="tsum2-slider">
+                    </md-input-container>
+                  </div>
+              </div>
             </md-content>
         </md-tab>
         <md-tab label="Management">
