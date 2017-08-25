@@ -17,7 +17,8 @@ var AppConfig = (function() {
         'angulartics',
         'angulartics.google.analytics',
         'angularMoment',
-        'ngFileUpload'
+        'ngFileUpload',
+        'ngMap'
     ];
 
     // Add a new vertical module

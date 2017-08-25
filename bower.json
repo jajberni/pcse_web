@@ -12,6 +12,7 @@
     "angular-aria": "~1.6.6",
     "angular-animate": "^1.6.6",
     "angular-no-captcha": "~0.6.0",
+    "ngmap": "^1.18.4",
     "angulartics": "~1.4.0",
     "angulartics-google-analytics": "~0.4.0",
     "restangular": "~1.6.1",

@@ -56,7 +56,8 @@
             'lib/moment/moment.js',
             'lib/moment-timezone/builds/moment-timezone-with-data.js',
             'lib/angular-moment/angular-moment.js',
-            'lib/ng-file-upload/ng-file-upload.js'
+            'lib/ng-file-upload/ng-file-upload.js',
+            'lib/ngmap/build/scripts/ng-map.js'
         ],
         scripts : [
             'application.js',

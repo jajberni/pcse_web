@@ -1,5 +1,5 @@
 <form name="simConfigForm" layout-fill flex>
-    <md-tabs md-selected="tabIndex" class="sim-config-content">
+    <md-tabs md-selected="tabIndex" md-dynamic-height class="sim-config-content">
         <md-tab label="Simulation Description">
             <md-content layout-padding layout="column">
                 <md-input-container>
@@ -10,15 +10,6 @@
                            required>
                 </md-input-container>
 
-               <md-autocomplete
-                   ng-model="sim.location"
-                   md-selected-item = "sim.locationRaw"
-                   ga-autocomplete-location
-                   md-select-on-focus
-                   md-floating-label="Location"
-                   tabindex="2">
-                </md-autocomplete>
-
                 <md-input-container>
                     <label>Description</label>
                     <textarea ng-model="sim.description"
@@ -27,9 +18,33 @@
                            ></textarea>
                 </md-input-container>
 
-
             </md-content>
         </md-tab>
+        <md-tab label="Location">
+          <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+            <ng-map id="map" zoom="11" center="[37.41116, -4.030826]" flex>
+                  <marker position="[37.41116, -4.030826]" title="experiment" draggable="true" on-dragend="getCurrentLocation()"></marker>
+            </ng-map>
+
+            <div>
+              <md-input-container>
+                <label>Latitude</label>
+                <input ng-model="sim.lat" flex type="number">
+              </md-input-container>
+
+              <md-input-container>
+                <label>Longitude</label>
+                <input ng-model="sim.lng" flex type="number">
+              </md-input-container>
+            </div>
+
+
+          </md-content>
+        </md-tab>
+
         <md-tab label="Soil">
             <md-content layout-padding
                         md-swipe-left="next()"
@@ -48,14 +63,13 @@
             <md-content layout-padding
                         md-swipe-left="next()"
                         md-swipe-right="previous()">
-                <md-input-container>
-                    <label>Closest Weather Station</label>
-                    <input ng-model="sim.weather_station"
-                           tabindex="1"
-                           name="weather_station">
-                </md-input-container>
 
-                <div>Pick one from:
+
+                <div>Currently the weather is picked automatically from <a href="https://power.larc.nasa.gov/">NASA POWER Database</a> based on the location of the simulation.
+
+                  <p>Note that the latest weather available is 2015.</p>
+
+                  In the future it is expected that you will be able to pick local weather from a nearby weather station, e.g.:
                     <a target="_blank" href="https://www.juntadeandalucia.es/agriculturaypesca/ifapa/ria/servlet/FrontController">Estaciones Agroclimáticas Andalucía</a>
 
                 </div>
