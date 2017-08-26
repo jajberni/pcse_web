@@ -105,6 +105,19 @@
                 Get it from <a target="_blank" href="https://www.google.com/analytics/web/">Google Analytics</a>
             </md-content>
         </md-tab>
+        <md-tab label="Maps">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+                <md-input-container>
+                    <label>Google Maps API Key</label>
+                    <input ng-model="cfg.maps_key"
+                           tabindex="1"
+                           name="maps_key">
+                </md-input-container>
+                Get it from <a target="_blank" href="https://developers.google.com/maps/documentation/javascript/get-api-key">Google Maps API</a>
+            </md-content>
+        </md-tab>
         <md-tab label="reCAPTCHA">
             <md-content layout-padding
                         md-swipe-left="next()"

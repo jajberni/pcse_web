@@ -13,6 +13,7 @@ from pydash import _
 class Config(Base, ConfigAuth):
     """A class describing datastore config."""
     analytics_id = ndb.StringProperty(default='')  # Google Analytics ID
+    maps_key = ndb.StringProperty(default='')  # Google Maps API Key
     brand_name = ndb.StringProperty(default=config.APPLICATION_ID)  # Webapp name
     description = ndb.StringProperty(default='')  # Webapp description
     feedback_email = ndb.StringProperty(default='')  # Admin's email, where feedback will be sent
