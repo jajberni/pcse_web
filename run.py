@@ -97,7 +97,7 @@ def site_packages_path():
 def create_virtualenv():
     """Creates virtialenv into temp folder if it doesn't exists"""
     if not os.path.exists(FILE_VENV):
-        os.system('virtualenv %s' % DIR_VENV)
+        os.system('virtualenv --no-site-packages %s' % DIR_VENV)
         os.system('echo %s >> %s' % (
             'set PYTHONPATH=' if IS_WINDOWS else 'unset PYTHONPATH', FILE_VENV
         ))
