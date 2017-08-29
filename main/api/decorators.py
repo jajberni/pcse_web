@@ -76,6 +76,18 @@ def user_by_username(func):
     return decorated_function
 
 
+def simulation_by_name(func):
+    """Gets Simulation model by name in URL and assigns it into g.simulation_db"""
+    @functools.wraps(func)
+    def decorated_function(*args, **kwargs): # pylint: disable=missing-docstring
+        g.simulation_db = model.Simulaton.get_by('name', kwargs['name'])
+        if g.simulation_db:
+            return func(*args, **kwargs)
+        return make_not_found_exception()
+
+    return decorated_function
+
+
 def login_required(func):
     """Returns 401 error if user is not logged in while requesting certain API URL"""
     @functools.wraps(func)
