@@ -14,7 +14,7 @@ from api.helpers import ArgumentValidator, make_list_response,\
         make_empty_ok_response, default_parser, to_compare_date
 from flask import request, g
 from pydash import _
-from api.decorators import model_by_key, user_by_username, authorization_required, admin_required
+from api.decorators import model_by_key, simulation_by_name, authorization_required, admin_required
 
 
 @API.resource('/api/v1/simulations')
@@ -36,6 +36,13 @@ class SimulationsAPI(Resource):
         total_count = total_count_future.get_result() if total_count_future else False
         return make_list_response(simulations, next_cursor, more, total_count)
 
+    def put(self):
+        data = request.json
+        print("Received simulation data: ", data)
+        sim = Simulation()
+        test_results = sim.run_simulation()
+        return make_list_response(test_results)
+
 
 @API.resource('/api/v1/simulations/<string:name>')
 class SimulationByUsernameAPI(Resource):
@@ -50,7 +57,7 @@ class SimulationByUsernameAPI(Resource):
 
 
 @API.resource('/api/v1/simulations/<string:key>')
-class UserByKeyAPI(Resource):
+class SimulationByKeyAPI(Resource):
     @authorization_required
     @model_by_key
     def put(self, key):
