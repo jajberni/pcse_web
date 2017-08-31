@@ -44,12 +44,13 @@
 
       $scope.sim.soil.SM = 45.0;
 
-      console.log("Ready for simulation")
+      console.log("Ready for simulation");
 
       $scope.run_simulation = function() {
         gaToast.show('The simulation is running in the background...');
           $scope.simulation.save().then(function() {
               _.extend(gaAppConfig, $scope.simulation);
+              console.log($scope.simulation);
               gaToast.show('Simulation configuration was successfully saved.');
               $scope.simConfigForm.$setPristine();
           });

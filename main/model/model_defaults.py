@@ -59,7 +59,8 @@ default_soil = {'CONTAB': [0.0,
                 'SPADS': 0.05,
                 'SPASS': 0.1,
                 'SPODS': 0.025,
-                'SPOSS': 0.04}
+                'SPOSS': 0.04,
+                'SM': 0.3}
 
 default_site = {'BG_K_SUPPLY': 0.091,
                 'BG_N_SUPPLY': 0.091,

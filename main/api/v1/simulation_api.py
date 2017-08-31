@@ -19,7 +19,7 @@ from api.decorators import model_by_key, simulation_by_name, authorization_requi
 
 @API.resource('/api/v1/simulations')
 class SimulationsAPI(Resource):
-    """Gets list of simulations. Uses ndb Cursor for pagination. Obtaining simulatons is executed
+    """Gets list of simulations. Uses ndb Cursor for pagination. Obtaining simulations is executed
     in parallel with obtaining total count via *_async functions
     """
     def get(self):
@@ -27,21 +27,33 @@ class SimulationsAPI(Resource):
         args = parser.parse_args()
         compare, date = to_compare_date(args.newer, args.older, args.orderBy)
 
-        users_query = Simulation.qry(order_by_date=args.orderBy, compare_date=compare, date=date, time_offset=args.offset)
-        users_future = users_query.fetch_page_async(args.size, start_cursor=args.cursor)
+        sim_query = Simulation.qry(order_by_date=args.orderBy, compare_date=compare, date=date, time_offset=args.offset)
+        sim_future = sim_query.fetch_page_async(args.size, start_cursor=args.cursor)
 
-        total_count_future = users_query.count_async(keys_only=True) if args.total else False
-        simulations, next_cursor, more = users_future.get_result()
+        total_count_future = sim_query.count_async(keys_only=True) if args.total else False
+        simulations, next_cursor, more = sim_future.get_result()
         simulations = [s.to_dict(include=Simulation.get_public_properties()) for s in simulations]
         total_count = total_count_future.get_result() if total_count_future else False
         return make_list_response(simulations, next_cursor, more, total_count)
 
+    def post(self):
+        data = request.json
+        print("Received simulation data: ", data)
+        sim = Simulation(name='sim125')
+        sim.put()
+        print('Created on PUT', sim)
+
+        return sim
+
     def put(self):
         data = request.json
         print("Received simulation data: ", data)
-        sim = Simulation()
-        test_results = sim.run_simulation()
-        return make_list_response(test_results)
+        sim = Simulation(name='sim125')
+        sim.put()
+
+        print('Created on POST', sim)
+
+        return sim
 
 
 @API.resource('/api/v1/simulations/<string:name>')
@@ -62,8 +74,8 @@ class SimulationByKeyAPI(Resource):
     @model_by_key
     def put(self, key):
         """Updates simulation's properties"""
-        update_properties = ['name', 'description', 'location',
-                         'soil_attributes', 'sowing_date', 'tsum1', 'tsum2']
+        update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date', 'crop_name'
+                         'sowing_date', 'tsum1', 'tsum2']
         if auth.is_admin():
             update_properties += ['owner_id']
 
@@ -81,8 +93,8 @@ class SimulationByKeyAPI(Resource):
     @model_by_key
     def post(self, key):
         """Updates user's properties"""
-        update_properties = ['name', 'description', 'location',
-                         'soil_attributes', 'sowing_date', 'tsum1', 'tsum2']
+        update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date', 'crop_name'
+                         'sowing_date', 'tsum1', 'tsum2']
         if auth.is_admin():
             update_properties += ['owner_id']
 

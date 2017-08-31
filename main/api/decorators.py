@@ -80,7 +80,7 @@ def simulation_by_name(func):
     """Gets Simulation model by name in URL and assigns it into g.simulation_db"""
     @functools.wraps(func)
     def decorated_function(*args, **kwargs): # pylint: disable=missing-docstring
-        g.simulation_db = model.Simulaton.get_by('name', kwargs['name'])
+        g.simulation_db = model.Simulation.get_by('name', kwargs['name'])
         if g.simulation_db:
             return func(*args, **kwargs)
         return make_not_found_exception()

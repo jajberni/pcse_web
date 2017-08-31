@@ -2,11 +2,11 @@
     'use strict';
     var module = angular.module('users');
 
-    module.controller('ProfileController', 
-        function($scope, Restangular, gaAppConfig, gaAuthentication, 
+    module.controller('ProfileController',
+        function($scope, Restangular, gaAppConfig, gaAuthentication,
                     $stateParams, _, $mdDialog, gaToast, $state,
                     gaUsers, $log) {
-        $log.debug("[ProfileController] init")
+        $log.debug("[ProfileController] init");
         $scope.cfg = gaAppConfig;
         $scope.auth = gaAuthentication;
         $scope.isMyProfile = function() {
@@ -25,7 +25,7 @@
         }
 
         $scope.getAvailableSocialAccounts = function() {
-            $log.debug("[ProfileController:getAvailableSocialAccount] start")
+            $log.debug("[ProfileController:getAvailableSocialAccount] start");
             if (!$scope.user) {
                 return;
             }
