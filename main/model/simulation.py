@@ -91,10 +91,11 @@ class Simulation(model.Base):
   tsum2 = ndb.FloatProperty(default=900.0)
   owner_id = ndb.StringProperty(default='')
   simulation_output = ndb.JsonProperty(default={})
+  plot_data = ndb.JsonProperty(default={})
   results_ok = ndb.BooleanProperty(default=False)
   simulation_dict = {}
 
-  PUBLIC_PROPERTIES = ['name', 'description', 'location', 'results_ok', 'simulation_output',
+  PUBLIC_PROPERTIES = ['name', 'description', 'location', 'results_ok', 'plot_data',
                        'soil_attributes', 'start_date', 'sowing_date', 'end_date', 'crop_name', 'tsum1', 'tsum2']
 
   PRIVATE_PROPERTIES = ['owner_id']
@@ -107,15 +108,17 @@ class Simulation(model.Base):
       #self._update_simulation_results()
 
   @ndb.transactional
-  def _update_simulation_results(self):
+  def update_simulation_results(self):
+    print('Updating simulation')
     json_data = json.dumps(self.run_simulation(), default=json_serial)
     self.simulation_output = json_data
+    self.plot_data = self.plot_dict()
     self.results_ok = True
 
   def plot_dict(self):
     ts = self.simulation_dict.keys()
-    lai = [v['LAI'] for v in self.simulation_output.itervalues()]
-    sm = [v['SM'] for v in self.simulation_output.itervalues()]
+    lai = [v['LAI'] for v in self.simulation_dict.itervalues()]
+    sm = [v['SM'] for v in self.simulation_dict.itervalues()]
     plot_data = json.dumps([
       {'key': "LAI", "values": {"x": ts, "y": lai}},
       {'key': "SM", "values": {"x": ts, "y": sm}}], default=json_serial)

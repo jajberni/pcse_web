@@ -233,6 +233,15 @@
 
             </md-content>
         </md-tab>
+        <md-tab label="Results" ng-if="sim.results_ok">
+            <md-content layout-padding
+                        md-swipe-right="previous()">
+
+              <div flex-gt-xs>
+                <h4>Plot Data</h4>
+                <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>
+              </div>
+            </md-content>
     </md-tabs>
     <md-content class="md-padding pad-top-0" layout="row" layout-margin>
         <md-button class="md-primary"
