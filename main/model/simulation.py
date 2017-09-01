@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.model import GeoPt
 import model
-import util
+import time
 
 from pcse.db import NASAPowerWeatherDataProvider
 from pcse.fileinput import CABOFileReader
@@ -14,7 +14,8 @@ from pcse.models import Wofost71_WLP_FD
 import datetime as dt
 import json
 from dateutil.parser import parse
-import yaml
+from flask import jsonify
+from operator import itemgetter
 
 from .model_defaults import default_amgt, default_crop, default_site, default_soil
 
@@ -82,7 +83,7 @@ class Simulation(model.Base):
   name = ndb.StringProperty(required=True, validator=SimulationValidator.create('name'))
   description = ndb.StringProperty(default="Demo simulation", validator=SimulationValidator.create('description'))
   location = DictGeoPt(default=GeoPt(37.4, -4.03))
-  soil_attributes = ndb.JsonProperty(default=soil_defaults)
+  soil_attributes = ndb.JsonProperty(default=default_soil)
   start_date = StringDateProperty(default=dt.date(2014, 9, 1))
   sowing_date = StringDateProperty(default=dt.date(2014, 10, 1))
   end_date = StringDateProperty(default=dt.date(2015, 7, 1))
@@ -100,28 +101,30 @@ class Simulation(model.Base):
 
   PRIVATE_PROPERTIES = ['owner_id']
 
-  def __init__(self,  *args, **kwargs):
-    super(Simulation, self).__init__(*args, **kwargs)
-    print(self.results_ok)
-    if self.results_ok is False:
-      print('We need to run simulation for this one')
-      #self._update_simulation_results()
-
   @ndb.transactional
   def update_simulation_results(self):
     print('Updating simulation')
-    json_data = json.dumps(self.run_simulation(), default=json_serial)
+    json_data = json.dumps(self.run_simulation(), default=json_timestamp)
     self.simulation_output = json_data
     self.plot_data = self.plot_dict()
     self.results_ok = True
 
   def plot_dict(self):
-    ts = self.simulation_dict.keys()
+    ts = map(fuzzydate_to_timestamp, self.simulation_dict.keys())
+
     lai = [v['LAI'] for v in self.simulation_dict.itervalues()]
     sm = [v['SM'] for v in self.simulation_dict.itervalues()]
+    twso = [v['TWSO'] for v in self.simulation_dict.itervalues()]
+    tagp = [v['TAGP'] for v in self.simulation_dict.itervalues()]
+
+    json.dumps(sorted(zip(lai, sm), key=itemgetter(0)))
     plot_data = json.dumps([
-      {'key': "LAI", "values": {"x": ts, "y": lai}},
-      {'key': "SM", "values": {"x": ts, "y": sm}}], default=json_serial)
+      {'key': "LAI", "values": sorted(zip(ts, lai), key=itemgetter(0))},
+      {'key': "SM", "values": sorted(zip(ts, sm), key=itemgetter(0))},
+      {'key': "TAGP", "values": sorted(zip(ts, tagp), key=itemgetter(0))},
+      {'key': "TWSO", "values": sorted(zip(ts, twso), key=itemgetter(0))}])
+
+    print("Plot DATA: ", plot_data)
 
     return plot_data
 
@@ -165,7 +168,16 @@ class Simulation(model.Base):
 
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
-
     if isinstance(obj, (dt.datetime, dt.date)):
-        return obj.isoformat()
+      return obj.isoformat()
     raise TypeError("Type %s not serializable" % type(obj))
+
+
+def json_timestamp(obj):
+  if isinstance(obj, (dt.datetime, dt.date)):
+    return int(time.mktime(obj.timetuple()))
+  raise TypeError("Type %s not serializable" % type(obj))
+
+
+def fuzzydate_to_timestamp(obj):
+  return time.mktime(is_date(None, obj).timetuple())

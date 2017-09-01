@@ -35,7 +35,7 @@
             $log.debug(self.simulations);
             $log.debug("[gaSimulations:simulationsChanged] simulations sorted ");
             $log.debug(self.simulationsSorted)
-        }
+        };
         /*****************************************************************
          * Load async 'simulations' from the server.
          * If a simulation is already available offline it is updated with the
@@ -78,7 +78,7 @@
                     deferred.resolve(newSimulations);
             });
             return deferred.promise;
-        }
+        };
 
         /*****************************************************************
          * Load the first batch (speed things up)
@@ -224,7 +224,7 @@
                 //}
             });
             return deferred.promise;
-        }
+        };
         /*****************************************************************
          * Deletes a simulation from the server.
          *

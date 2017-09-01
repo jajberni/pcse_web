@@ -38,23 +38,29 @@ class SimulationsAPI(Resource):
 
     def post(self):
         data = request.json
-        print("Received simulation data: ", data)
-        sim = Simulation(name='sim125')
+        print("POST: Received simulation data: ", data)
+        sim = Simulation(**data)
+        sim.update_simulation_results()
         sim.put()
-        print('Created on PUT', sim)
+        if auth.is_admin():
+            properties = Simulation.get_private_properties()
+        else:
+            properties = Simulation.get_public_properties()
 
-        return sim
+        return sim.to_dict(include=properties)
 
     def put(self):
         data = request.json
-        print("Received simulation data: ", data)
-        sim = Simulation(name='sim125')
+        print("PUT: Received simulation data: ", data)
+        sim = Simulation(**data)
         sim.update_simulation_results()
         sim.put()
+        if auth.is_admin():
+            properties = Simulation.get_private_properties()
+        else:
+            properties = Simulation.get_public_properties()
 
-        print('Created on POST', sim)
-
-        return sim
+        return sim.to_dict(include=properties)
 
 
 @API.resource('/api/v1/simulations/<string:name>')
@@ -75,12 +81,13 @@ class SimulationByKeyAPI(Resource):
     @model_by_key
     def put(self, key):
         """Updates simulation's properties"""
-        update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date', 'crop_name'
-                         'sowing_date', 'tsum1', 'tsum2']
+        update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date',
+                             'crop_name', 'sowing_date', 'tsum1', 'tsum2']
         if auth.is_admin():
             update_properties += ['owner_id']
 
         new_data = _.pick(request.json, update_properties)
+        print("SAVE PUT: Received simulation data: ", new_data)
         g.model_db.populate(**new_data)
         g.model_db.update_simulation_results()
         g.model_db.put()
@@ -94,13 +101,14 @@ class SimulationByKeyAPI(Resource):
     @authorization_required
     @model_by_key
     def post(self, key):
-        """Updates user's properties"""
-        update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date', 'crop_name'
-                         'sowing_date', 'tsum1', 'tsum2']
+        """Updates simulation's properties"""
+        update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date',
+                             'crop_name', 'sowing_date', 'tsum1', 'tsum2']
         if auth.is_admin():
             update_properties += ['owner_id']
 
         new_data = _.pick(request.json, update_properties)
+        print("SAVE POST: Received simulation data: ", new_data)
         g.model_db.populate(**new_data)
         g.model_db.put()
         #return make_empty_ok_response()
@@ -118,4 +126,9 @@ class SimulationByKeyAPI(Resource):
         return make_empty_ok_response()
 
 
-
+@API.resource('/api/v1/simulations/new')
+class SimulationNew(Resource):
+    def get(self):
+        new_sim = Simulation(name='New Simulation')
+        properties = Simulation.get_private_properties()
+        return new_sim.to_dict(include=properties)

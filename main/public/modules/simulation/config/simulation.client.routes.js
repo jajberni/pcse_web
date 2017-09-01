@@ -7,7 +7,7 @@
             .state('simConfig', {
                 url         : '/sim_config',
                 controller  : 'SimConfigController',
-                templateUrl : '/p/modules/simulation/sim-config/sim-config.client.view.html'
+                templateUrl : '/p/modules/simulation/sim-config/sim-edit.client.view.html'
             }).state('simulations', {
                 url         : '/simulations',
                 controller  : 'SimulationsController',

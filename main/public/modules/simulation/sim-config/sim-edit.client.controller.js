@@ -16,16 +16,13 @@
         gaBrowserHistory.back();
       }
 
-
-
       $scope.$watch('simulation', function(newVal) {
             if (newVal) {
                 $log.debug("[SimEditController:$watch(simulation)] simulation changed");
                 $log.debug($scope.simulation);
 
                 $scope.sim = $scope.simulation.clone();
-                $log.debug($scope.sim);
-                $log.debug($scope.sim.plot_data);
+                //$log.debug($scope.sim);
 
                 $scope.soil_attributes = $scope.sim.soil_attributes;
 
@@ -40,7 +37,18 @@
                   $scope.sim.lng = markers[0].position.lng();
                 });
 
-                //$scope.data = $scope.sim.plot_data;
+                $scope.data = JSON.parse($scope.sim.plot_data);
+                $scope.data[0].yAxis = 1;
+                $scope.data[0].type = "line";
+                $scope.data[1].yAxis = 1;
+                $scope.data[1].type = "line";
+                $scope.data[2].yAxis = 2;
+                $scope.data[2].type = "line";
+                $scope.data[3].yAxis = 2;
+                $scope.data[3].type = "line";
+                $log.debug("[SimEditController: post data");
+
+                $log.debug($scope.data);
             }
       });
 
@@ -67,16 +75,16 @@
 
       $scope.options = {
         chart: {
-            type: 'lineChart',
+            type: 'multiChart',
             height: 300,
             margin : {
                 top: 20,
-                right: 20,
+                right: 100,
                 bottom: 40,
-                left: 55
+                left: 50
             },
-            x: function(d){ return d.x; },
-            y: function(d){ return d.y; },
+            x: function(d){ return d[0]*1e3; },
+            y: function(d){ return d[1]; },
             useInteractiveGuideline: true,
             dispatch: {
                 stateChange: function(e){ console.log("stateChange"); },
@@ -85,26 +93,39 @@
                 tooltipHide: function(e){ console.log("tooltipHide"); }
             },
             xAxis: {
-                axisLabel: 'Time (ms)'
-            },
-            yAxis: {
-                axisLabel: 'Voltage (v)',
-                tickFormat: function(d){
-                    return d3.format('.02f')(d);
+                axisLabel: 'Date',
+                tickFormat: function(d) {
+                    return d3.time.format('%m/%d/%y')(new Date(d))
                 },
-                axisLabelDistance: -10
+                showMaxMin: false,
+                staggerLabels: true
             },
+            yAxis1: {
+              axisLabel: 'Leaf Area Index & Soil Moisture [cm3/cm3]',
+                tickFormat: function(d){
+                    return d3.format(',.02f')(d);
+                },
+              axisLabelDistance: -10
+            },
+            yAxis2: {
+              axisLabel: 'Grain & Total Biomass',
+                tickFormat: function(d){
+                    return d3.format(',.0f')(d);
+                },
+              axisLabelDistance: -10
+            },
+
             callback: function(chart){
                 console.log("!!! lineChart callback !!!");
             }
         },
         title: {
             enable: true,
-            text: 'Title for Line Chart'
+            text: 'Model outputs'
         },
         subtitle: {
             enable: true,
-            text: 'Subtitle for simple line chart.',
+            text: 'Click on variables for hide/show',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
@@ -112,48 +133,13 @@
         },
         caption: {
             enable: true,
-            html: '<b>Figure 1.</b> test',
+            html: '<b>Figure 1.</b>LAI, Soil Moisture and Biomass',
             css: {
                 'text-align': 'justify',
                 'margin': '10px 13px 0px 7px'
             }
         }
       };
-
-        $scope.data = sinAndCos();
-
-        /*Random Data Generator */
-        function sinAndCos() {
-            var sin = [],sin2 = [],
-                cos = [];
-
-            //Data is represented as an array of {x,y} pairs.
-            for (var i = 0; i < 100; i++) {
-                sin.push({x: i, y: Math.sin(i/10)});
-                sin2.push({x: i, y: i % 10 == 5 ? null : Math.sin(i/10) *0.25 + 0.5});
-                cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
-            }
-
-            //Line chart data should be sent as an array of series objects.
-            return [
-                {
-                    values: sin,      //values - represents the array of {x,y} data points
-                    key: 'Sine Wave', //key  - the name of the series.
-                    color: '#ff7f0e'  //color - optional: choose your own line color.
-                },
-                {
-                    values: cos,
-                    key: 'Cosine Wave',
-                    color: '#2ca02c'
-                },
-                {
-                    values: sin2,
-                    key: 'Another sine wave',
-                    color: '#7777ff',
-                    area: true      //area - set to true if you want this line to turn into a filled area chart.
-                }
-            ];
-        };
 
     });
 
