@@ -236,7 +236,7 @@
     ]);
 
     gulp.task('build', [
-        'lint',
+//        'lint',
         'zip-lib',
         'uglify',
         'inject-scripts',
