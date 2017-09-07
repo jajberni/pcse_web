@@ -3,6 +3,8 @@
 # Allard de Wit (allard.dewit@wur.nl), April 2014
 import sys, os
 import urllib
+from google.appengine.api import urlfetch
+
 from datetime import date, timedelta
 import numpy as np
 
@@ -187,15 +189,28 @@ class NASAPowerWeatherDataProvider(WeatherDataProvider):
                            month=d.month, day=d.day)
         msg = "Starting retrieval from NASA Power with URL: %s" % url
         self.logger.debug(msg)
-        req = urllib.urlopen(url)
 
-        if req.getcode() != self.HTTP_OK:
-            msg = ("Failed retrieving POWER data from %s. Server returned HTTP " +
-                   "code: %i") % (server, req.getcode())
-            raise PCSEError(msg)
+        try:
+            result = urlfetch.fetch(url, validate_certificate=True)
+            if result.status_code == 200:
+                print(result.content)
+                powerdata = result.content.readlines()
+            else:
+                msg = ("Failed retrieving POWER data from %s. Server returned HTTP " +
+                   "code: %i") % (server, result.status_code)
+                raise PCSEError(msg)
+        except urlfetch.Error:
+            self.logger.exception('Caught exception fetching url')
 
-        powerdata = req.readlines()
-        req.close()
+        # req = urllib.urlopen(url)
+
+        #if req.getcode() != self.HTTP_OK:
+        #    msg = ("Failed retrieving POWER data from %s. Server returned HTTP " +
+        #           "code: %i") % (server, req.getcode())
+        #    raise PCSEError(msg)
+
+        #powerdata = req.readlines()
+        #req.close()
 
         msg = "Successfully retrieved data from NASA Power"
         self.logger.debug(msg)
