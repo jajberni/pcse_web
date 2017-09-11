@@ -97,7 +97,7 @@
             xAxis: {
                 axisLabel: 'Date',
                 tickFormat: function(d) {
-                    return d3.time.format('%m/%d/%y')(new Date(d))
+                    return d3.time.format('%Y/%m/%d')(new Date(d))
                 },
                 showMaxMin: false,
                 staggerLabels: true

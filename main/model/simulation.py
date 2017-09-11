@@ -186,6 +186,7 @@ class Simulation(model.Base):
     parvalues = ParameterProvider(sitedata=site, soildata=soil, cropdata=crop)
     crop['TSUM1'] = self.tsum1
     crop['TSUM2'] = self.tsum2
+    soil.update(self.soil_attributes)
     wofsim = Wofost71_WLP_FD(parvalues, self.wdp, agromanagement=amgt)
     wofsim.run_till_terminate()
     output = wofsim.get_output()
