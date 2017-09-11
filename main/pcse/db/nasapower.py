@@ -190,6 +190,7 @@ class NASAPowerWeatherDataProvider(WeatherDataProvider):
         msg = "Starting retrieval from NASA Power with URL: %s" % url
         self.logger.debug(msg)
         print(msg)
+        urlfetch.set_default_fetch_deadline(30)
 
         try:
             result = urlfetch.fetch(url, validate_certificate=True)
