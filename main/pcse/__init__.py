@@ -40,7 +40,6 @@ logging.config.dictConfig(settings.LOG_CONFIG)
 
 from . import db
 from . import fileinput
-from . import tests
 from . import agromanager
 from . import soil
 from . import crop
