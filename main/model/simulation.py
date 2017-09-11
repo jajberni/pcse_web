@@ -45,7 +45,6 @@ class SimulationValidator(model.BaseValidator):
     return name
 
 def is_date(prop, value):
-  print("Got date: ", value)
   if isinstance(value, dt.date):
     return value
   elif isinstance(value, dt.datetime):
@@ -58,14 +57,12 @@ def is_geoPt(prop, value):
   if isinstance(value, GeoPt):
     return value
   else:
-    print("Got: ", value)
     pt = GeoPt(value.lat, value.lon)
     return pt
 
 
 class StringDateProperty(ndb.DateProperty):
   def _validate(self, value):
-    print("Date validation: ", value)
     if isinstance(value, basestring):
       o = parse(value).date()
       return o

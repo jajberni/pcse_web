@@ -189,6 +189,7 @@ class NASAPowerWeatherDataProvider(WeatherDataProvider):
                            month=d.month, day=d.day)
         msg = "Starting retrieval from NASA Power with URL: %s" % url
         self.logger.debug(msg)
+        print(msg)
 
         try:
             result = urlfetch.fetch(url, validate_certificate=True)
@@ -201,6 +202,7 @@ class NASAPowerWeatherDataProvider(WeatherDataProvider):
                 raise PCSEError(msg)
         except urlfetch.Error:
             self.logger.exception('Caught exception fetching url')
+            print("Error downloading from NASA")
 
         # req = urllib.urlopen(url)
 
