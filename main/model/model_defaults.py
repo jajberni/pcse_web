@@ -259,19 +259,4 @@ default_amgt = [{datetime.date(2014, 9, 1): {'CropCalendar': {'crop_end_date': d
                                                               'max_duration': 330,
                                                               'variety_name': 'winter-wheat'},
                                              'StateEvents': None,
-                                             'TimedEvents': [{'comment': 'All fertilizer amounts in kg/ha',
-                                                              'event_signal': 'apply_npk',
-                                                              'events_table': [
-                                                                {datetime.date(2014, 9, 10): {'K_amount': 20.0,
-                                                                                              'K_recovery': 0.7,
-                                                                                              'N_amount': 0.0,
-                                                                                              'N_recovery': 0.7,
-                                                                                              'P_amount': 40.0,
-                                                                                              'P_recovery': 0.7}},
-                                                                {datetime.date(2014, 12, 5): {'K_amount': 20.0,
-                                                                                              'K_recovery': 0.7,
-                                                                                              'N_amount': 0.0,
-                                                                                              'N_recovery': 0.7,
-                                                                                              'P_amount': 10.0,
-                                                                                              'P_recovery': 0.7}}],
-                                                              'name': 'Timed N/P/K application table'}]}}]
+                                             'TimedEvents': None}}]

@@ -55,6 +55,8 @@
 
       $scope.run_simulation = function() {
 
+        $scope.sim.results_ok = false;
+
         gaSimulations.saveAsync($scope.sim,true).then(function(updatedSimulation) {
             //_.extend($scope.user, $scope.editedUser);
             _.extend($scope.simulation, updatedSimulation);
