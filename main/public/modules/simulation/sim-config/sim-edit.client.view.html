@@ -32,12 +32,14 @@
             <div>
               <md-input-container>
                 <label>Latitude</label>
-                <input ng-model="sim.location.lat" flex type="number" name="sim_lat" min='-180' step='Any' >
+                <input ng-model="sim.location.lat" flex type="number" name="sim_lat" min='-90' max='90' step='Any'
+                       aria-label="Latitude" id="sim_lat">
               </md-input-container>
 
               <md-input-container>
                 <label>Longitude</label>
-                <input ng-model="sim.location.lon" flex type="number" name="sim_lng" min='-180' step='Any' >
+                <input ng-model="sim.location.lon" flex type="number" name="sim_lng" min='-180' max='180' step='Any'
+                       aria-label="Latitude" id="sim_lon">
               </md-input-container>
             </div>
 

@@ -128,8 +128,12 @@ class Simulation(model.Base):
     json_data = json.dumps(self.run_simulation(), default=json_timestamp)
     self.simulation_output = json_data
     self.plot_data = self.plot_dict()
-    self.weather_data = (self.wdp.store, self.wdp.elevation, self.wdp.longitude, self.wdp.latitude,
-                         self.wdp.description, self.wdp.ETmodel)
+    self.weather_data = {'store': self.wdp.store,
+                         'elevation': self.wdp.elevation,
+                         'longitude': self.wdp.longitude,
+                         'latitude': self.wdp.latitude,
+                         'description': self.wdp.description,
+                         'ETmodel': self.wdp.ETmodel}
     self.results_ok = True
 
   def plot_dict(self):
@@ -152,19 +156,22 @@ class Simulation(model.Base):
     return plot_data
 
   def run_simulation(self):
-
-    if self.weather_data is None:
+    if not isinstance(self.weather_data, dict):
       print("Fetching NASA weather...")
       self.wdp = NASAPowerWeatherDataProvider(self.location.lat, self.location.lon)
     else:
       print("Weather data is cached...")
-      self.wdp = WeatherDataProvider()
-      self.wdp.store = self.weather_data[0]
-      self.wdp.elevation = self.weather_data[1]
-      self.wdp.longitude = self.weather_data[2]
-      self.wdp.latitude = self.weather_data[3]
-      self.wdp.description = self.weather_data[4]
-      self.wdp.ETmodel = self.weather_data[5]
+      if (self.location.lat != self.weather_data['latitude']) or (self.location.lon != self.weather_data['longitude']):
+        print("Location changed, fetching NASA weather again")
+        self.wdp = NASAPowerWeatherDataProvider(self.location.lat, self.location.lon)
+      else:
+        self.wdp = WeatherDataProvider()
+        self.wdp.store = self.weather_data['store']
+        self.wdp.elevation = self.weather_data['elevation']
+        self.wdp.longitude = self.weather_data['longitude']
+        self.wdp.latitude = self.weather_data['latitude']
+        self.wdp.description = self.weather_data['description']
+        self.wdp.ETmodel = self.weather_data['ETmodel']
     print(self.wdp)
     amgt = default_amgt
     soil = default_soil
