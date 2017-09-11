@@ -59,7 +59,8 @@
                            aria-label="Soil moisture" name="sm-slider"></md-slider>
 
                 <md-input-container>
-                  <input flex type="number" ng-model="sim.soil_attributes.SM" name="sm-input" aria-label="Soil moisture" aria-controls="sm-slider">
+                  <input flex type="number" ng-model="sim.soil_attributes.SM" name="sm-input" title="Soil moisture"
+                         step=0.01 min="{{sim.soil_attributes.SMW}}" max="{{sim.soil_attributes.SMFCF}}" aria-controls="sm-slider">
                 </md-input-container>
               </md-slider-container>
 
@@ -70,8 +71,8 @@
               <div layout="row" layout-padding>
                 <md-slider-container flex>
                   <md-input-container>
-                    <input flex type="number" ng-model="sim.soil_attributes.SMW" aria-label="Wilting point" name="smw-input"
-                           aria-controls="smw-slider">
+                    <input flex type="number" ng-model="sim.soil_attributes.SMW" aria-label="Wilting point" title="smw-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="smw-slider">
                   </md-input-container>
 
                   <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.SMW" step="0.01" min="0.0" max="1.0" name="smw-slider"
@@ -82,8 +83,8 @@
 
                 <md-slider-container flex>
                   <md-input-container>
-                    <input flex type="number" ng-model="sim.soil_attributes.SMFCF" aria-label="Field capacity" name="smcf-input"
-                           aria-controls="smcf-slider">
+                    <input flex type="number" ng-model="sim.soil_attributes.SMFCF" aria-label="Field capacity" title="smcf-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="smcf-slider">
                   </md-input-container>
 
                   <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.SMFCF" step="0.01" min="0.0" max="1.0" name="smcf-slider"
@@ -94,8 +95,8 @@
 
                 <md-slider-container flex>
                   <md-input-container>
-                    <input flex type="number" ng-model="sim.soil_attributes.SM0" aria-label="Saturation" name="sm0-input"
-                           aria-controls="sm0-slider">
+                    <input flex type="number" ng-model="sim.soil_attributes.SM0" aria-label="Saturation" title="sm0-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="sm0-slider">
                   </md-input-container>
 
                   <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.SM0" step="0.01" min="0.0" max="1.0" name="sm0-slider"
@@ -106,8 +107,8 @@
 
                 <md-slider-container flex>
                   <md-input-container>
-                    <input flex type="number" ng-model="sim.soil_attributes.CRAIRC" aria-label="Critical air content" name="crairc-input"
-                           aria-controls="crairc-slider">
+                    <input flex type="number" ng-model="sim.soil_attributes.CRAIRC" aria-label="Critical air content" title="crairc-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="crairc-slider">
                   </md-input-container>
 
                   <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.CRAIRC" step="0.01" min="0.0" max="1.0" name="crairc-slider"
@@ -118,7 +119,7 @@
 
                 <md-slider-container flex>
                   <md-input-container>
-                    <input flex type="number" ng-model="sim.soil_attributes.RDMSOL" aria-label="Max rooting depth" name="rdmsol-input"
+                    <input flex type="number" ng-model="sim.soil_attributes.RDMSOL" aria-label="Max rooting depth" title="rdmsol-input"
                            aria-controls="rmdsol-slider">
                   </md-input-container>
 

@@ -89,6 +89,7 @@ class SimulationByKeyAPI(Resource):
         new_data = _.pick(request.json, update_properties)
         print("SAVE PUT: Received simulation data: ", new_data)
         g.model_db.populate(**new_data)
+        # TODO: If location changes, then retrieve NASA weather again
         g.model_db.update_simulation_results()
         g.model_db.put()
         #return make_empty_ok_response()

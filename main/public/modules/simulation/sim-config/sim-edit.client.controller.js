@@ -50,7 +50,7 @@
 
                 $log.debug($scope.data);
             }
-      });
+      }, true);
 
 
       $scope.run_simulation = function() {

@@ -9,7 +9,7 @@ import time
 
 from pcse.db import NASAPowerWeatherDataProvider
 from pcse.fileinput import CABOFileReader
-from pcse.base_classes import ParameterProvider
+from pcse.base_classes import ParameterProvider, WeatherDataProvider
 from pcse.models import Wofost71_WLP_FD
 import datetime as dt
 import json
@@ -74,6 +74,27 @@ class DictGeoPt(ndb.GeoPtProperty):
       pt = GeoPt(value['lat'], value['lon'])
       return pt
 
+class WeatherDataProviderProperty(ndb.PickleProperty):
+  def _validate(self, value):
+    # TODO: integrity check
+    self.store = value[0]
+    self.elevation = value[1]
+    self.longitude = value[2]
+    self.latitude = value[3]
+    self.description = value[4]
+    self.ETmodel = value[5]
+    print("WDP latitude: ", value[3])
+    return value
+
+  def getWDP(self):
+    wdp = WeatherDataProvider()
+    wdp.store = self.store
+    wdp.elevation = self.elevation
+    wdp.longitude = self.longitude
+    wdp.latitude = self.latitude
+    wdp.description = self.description
+    wdp.ETmodel = self.ETmodel
+
 
 class Simulation(model.Base):
   """A class describing datastore users."""
@@ -91,6 +112,9 @@ class Simulation(model.Base):
   simulation_output = ndb.JsonProperty(default={})
   plot_data = ndb.JsonProperty(default={})
   results_ok = ndb.BooleanProperty(default=False)
+  #weather_data = WeatherDataProviderProperty()
+  weather_data = ndb.PickleProperty(compressed=True)
+  wdp = None
   simulation_dict = {}
 
   PUBLIC_PROPERTIES = ['name', 'description', 'location', 'results_ok', 'plot_data',
@@ -104,6 +128,8 @@ class Simulation(model.Base):
     json_data = json.dumps(self.run_simulation(), default=json_timestamp)
     self.simulation_output = json_data
     self.plot_data = self.plot_dict()
+    self.weather_data = (self.wdp.store, self.wdp.elevation, self.wdp.longitude, self.wdp.latitude,
+                         self.wdp.description, self.wdp.ETmodel)
     self.results_ok = True
 
   def plot_dict(self):
@@ -126,9 +152,20 @@ class Simulation(model.Base):
     return plot_data
 
   def run_simulation(self):
-    print("Fetching NASA weather...")
-    wdp = NASAPowerWeatherDataProvider(self.location.lat, self.location.lon)
-    print(wdp)
+
+    if self.weather_data is None:
+      print("Fetching NASA weather...")
+      self.wdp = NASAPowerWeatherDataProvider(self.location.lat, self.location.lon)
+    else:
+      print("Weather data is cached...")
+      self.wdp = WeatherDataProvider()
+      self.wdp.store = self.weather_data[0]
+      self.wdp.elevation = self.weather_data[1]
+      self.wdp.longitude = self.weather_data[2]
+      self.wdp.latitude = self.weather_data[3]
+      self.wdp.description = self.weather_data[4]
+      self.wdp.ETmodel = self.weather_data[5]
+    print(self.wdp)
     amgt = default_amgt
     soil = default_soil
     site = default_site
@@ -142,7 +179,7 @@ class Simulation(model.Base):
     parvalues = ParameterProvider(sitedata=site, soildata=soil, cropdata=crop)
     crop['TSUM1'] = self.tsum1
     crop['TSUM2'] = self.tsum2
-    wofsim = Wofost71_WLP_FD(parvalues, wdp, agromanagement=amgt)
+    wofsim = Wofost71_WLP_FD(parvalues, self.wdp, agromanagement=amgt)
     wofsim.run_till_terminate()
     output = wofsim.get_output()
 
