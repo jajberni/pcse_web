@@ -121,7 +121,7 @@ class Simulation(model.Base):
       {'key': "TAGP", "values": sorted(zip(ts, tagp), key=itemgetter(0))},
       {'key': "TWSO", "values": sorted(zip(ts, twso), key=itemgetter(0))}])
 
-    print("Plot DATA: ", plot_data)
+    #print("Plot DATA: ", plot_data)
 
     return plot_data
 

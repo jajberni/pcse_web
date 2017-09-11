@@ -195,8 +195,10 @@ class NASAPowerWeatherDataProvider(WeatherDataProvider):
         try:
             result = urlfetch.fetch(url, validate_certificate=True)
             if result.status_code == 200:
-                print(result.content)
-                powerdata = result.content.readlines()
+                #print("Results: ", result.content[:700])
+                print("Extracting lines now...")
+                powerdata = result.content.splitlines()
+                print("Lines: ", powerdata[:10])
             else:
                 msg = ("Failed retrieving POWER data from %s. Server returned HTTP " +
                    "code: %i") % (server, result.status_code)
