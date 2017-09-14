@@ -18,7 +18,8 @@ var AppConfig = (function() {
         'angulartics.google.analytics',
         'angularMoment',
         'ngFileUpload',
-        'ngMap'
+        'ngMap',
+        'nvd3'
     ];
 
     // Add a new vertical module
@@ -57,7 +58,11 @@ angular.module(AppConfig.applicationModuleName).config([
     }
 ]).config(['$logProvider', function($logProvider){
     $logProvider.debugEnabled(true);
-}]);
+}]).config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+       return moment(date).format('YYYY-MM-DD');
+    };
+});
 
 //Then define the init function for starting up the application
 angular.element(document).ready(function() {

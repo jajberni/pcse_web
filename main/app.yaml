@@ -15,6 +15,9 @@ libraries:
 - name: jinja2
   version: latest
 
+- name: numpy
+  version: "1.6.1"
+
 handlers:
 - url: /favicon.ico
   static_files: public/modules/core/img/favicon.ico

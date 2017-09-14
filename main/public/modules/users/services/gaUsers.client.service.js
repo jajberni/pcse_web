@@ -35,7 +35,7 @@
             $log.debug(self.users);
             $log.debug("[gaUsers:usersChanged] users sorted ");
             $log.debug(self.usersSorted)
-        }
+        };
         /*****************************************************************
          * Load async 'users' from the server.
          * If a user is already available offline it is updated with the
@@ -78,7 +78,7 @@
                     deferred.resolve(newUsers);
             });
             return deferred.promise;
-        }
+        };
 
         /*****************************************************************
          * Load the first batch (speed things up)
@@ -224,7 +224,7 @@
                 //}
             });
             return deferred.promise;
-        }
+        };
         /*****************************************************************
          * Deletes a user from the server.
          *

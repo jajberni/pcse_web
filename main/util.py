@@ -119,6 +119,29 @@ def constrain_string(string, minlen, maxlen):
     return string
 
 
+def constrain_minmax(value, minval, maxval):
+    """Validation function constrains minimal and maximal lengths of string.
+
+    Args:
+        value (float): Numeric value to be checked
+        minval (float): Minimal value
+        maxval (float): Maximal value
+
+    Returns:
+        float: Returns given value
+
+    Raises:
+        ValueError: If string doesn't fit into min/max constrains
+
+    """
+
+    if value <= minval:
+        raise ValueError('Input need to be > %s' % minval)
+    elif value >= maxval:
+        raise ValueError('Input need to be < %s' % maxval)
+    return value
+
+
 def constrain_regex(string, regex):
     """Validation function checks validity of string for given regex.
 
@@ -147,7 +170,7 @@ def create_validator(lengths=None, regex='', required=True):
         lengths (list): list of exact length 2. e.g [3, 7]
             indicates that string should be between 3 and 7 charactes
         regex (string): Regular expression
-        required (bool): Wheter empty value '' should be accepted as valid,
+        required (bool): Whether empty value '' should be accepted as valid,
             ignoring other constrains
 
     Returns:
@@ -183,3 +206,43 @@ def create_validator(lengths=None, regex='', required=True):
     return validator_function
 
 
+def create_numeric_validator(range=None, required=True):
+    """This is factory function, which creates validator functions, which
+    will then validate passed numeric values according to a range
+
+    Args:
+        range (list): list of the min and max e.g [3.2, 7.6]
+            indicates that value should be between 3.2 and 7.6
+        regex (string): Regular expression
+        required (bool): Whether empty value '' should be accepted as valid,
+            ignoring other constrains
+
+    Returns:
+        function: Function, which will be used for validating input
+    """
+
+    def validator_function(value, prop):
+        """Function validates input against constraints given from closure function
+        These functions are primarily used as ndb.Property validators
+
+        Args:
+            value (float): input value to be validated
+            prop (string): ndb.Property name, which is validated
+
+        Returns:
+            float: Returns original float, if valid
+
+        Raises:
+            ValueError: If input isn't valid
+
+        """
+        # when we compare ndb.Property with equal operator e.g User.name == 'abc' it
+        # passes arguments to validator in different order than as when e.g putting data,
+        # hence the following parameters switch
+        if isinstance(value, ndb.Property):
+            value = prop
+        if not required and value is None:
+            return 0.0
+        return constrain_minmax(value, range[0], range[1])
+
+    return validator_function

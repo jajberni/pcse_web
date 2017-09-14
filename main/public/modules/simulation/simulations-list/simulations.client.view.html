@@ -1,0 +1,34 @@
+<div layout="row" layout-fill layout-align="center start">
+    <md-content flex-sm="80" flex-md="65" flex-gt-md="50" flex
+            md-whiteframe="1"
+            class="no-overflow-x"
+            layout-fill>
+    <md-toolbar class="md-accent">
+    <div class="md-toolbar-tools">
+        <h1>Simulations
+            <span class="mar-lef-5" ng-show="totalSimulations">({{totalSimulations}})</span>
+        </h1>
+        <span flex></span>
+        <md-icon md-svg-icon="account-multiple"></md-icon>
+    </div>
+    </md-toolbar>
+    <md-virtual-repeat-container id="vertical-container" ng-style="listStyle">
+    <div md-virtual-repeat="simulation in repeatedSimulations" md-on-demand
+        flex>
+        <md-list-item class="md-3-line simulation-list-item" ui-sref="simulation.edit({name: simulation.name})">
+
+        <div class="md-list-item-text" flex>
+            <h3>{{ simulation.name }}</h3>
+            <h4>{{ simulation.name }}</h4>
+            <p>{{ simulation.description | cut:true:40 }}</p>
+        </div>
+
+        <!-- TODO: style is a fix, better solution? -->
+        <md-divider md-inset ng-if="!$last" style="width:90%;width:calc(100% - 90px);"></md-divider>
+        </md-list-item>
+
+    </div>
+    </md-virtual-repeat-container>
+    <md-progress-linear ng-show="gaSimulation.isLoading" md-mode="indeterminate" class="pad-bot-10"></md-progress-linear>
+    </md-content>
+</div>

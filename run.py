@@ -130,8 +130,8 @@ def exec_pip_commands(command):
 def install_py_libs():
     """Installs requirements from requirements file and then copies them
     from site-packages folder into main/lib folder
-    Alse excludes files that don't need to be deployed"""
-    exec_pip_commands('pip install -q -r %s' % FILE_REQUIREMENTS)
+    Also excludes files that don't need to be deployed"""
+    exec_pip_commands('pip install -r %s' % FILE_REQUIREMENTS)
 
     exclude_ext = ['.pth', '.pyc', '.egg-info', '.dist-info']
     exclude_prefix = ['setuptools-', 'pip-', 'Pillow-']
@@ -275,6 +275,7 @@ def run_dev_appserver():
     ] + ARGS.args
 
     run_command = ' '.join(args)
+    print(run_command)
     os.system(run_command)
 
 

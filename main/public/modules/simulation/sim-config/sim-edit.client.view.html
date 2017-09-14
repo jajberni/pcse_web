@@ -1,0 +1,257 @@
+<form name="simConfigForm" layout-fill flex>
+    <md-tabs md-selected="tabIndex" md-dynamic-height class="sim-config-content">
+        <md-tab label="Simulation Parameters">
+            <md-content layout-padding layout="column">
+                <md-input-container>
+                    <label>Simulation Name</label>
+                    <input ng-model="sim.name"
+                           tabindex="1"
+                           name="sim_name"
+                           required>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Description</label>
+                    <textarea ng-model="sim.description"
+                           tabindex="3"
+                           name="description"
+                           ></textarea>
+                </md-input-container>
+
+            </md-content>
+        </md-tab>
+        <md-tab label="Location">
+          <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+            <ng-map id="map" zoom="11" center="[{{sim.location.lat}}, {{sim.location.lon}}]" flex>
+                  <marker position="[{{sim.location.lat}}, {{sim.location.lon}}]" title="experiment" draggable="true" on-dragend="getCurrentLocation()"></marker>
+            </ng-map>
+
+            <div>
+              <md-input-container>
+                <label>Latitude</label>
+                <input ng-model="sim.location.lat" flex type="number" name="sim_lat" min='-90' max='90' step='Any'
+                       aria-label="Latitude" id="sim_lat">
+              </md-input-container>
+
+              <md-input-container>
+                <label>Longitude</label>
+                <input ng-model="sim.location.lon" flex type="number" name="sim_lng" min='-180' max='180' step='Any'
+                       aria-label="Latitude" id="sim_lon">
+              </md-input-container>
+            </div>
+
+
+          </md-content>
+        </md-tab>
+
+        <md-tab label="Soil">
+            <md-content layout="column" layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+              <h3>Initial conditions</h3>
+              <md-slider-container>
+                <div flex="10" layout layout-align="center center">
+                  <span class="md-body-1">Soil moisture [cm3/cm3]</span>
+                </div>
+                <md-slider ng-model="sim.soil_attributes.SM" step=0.01 min="{{sim.soil_attributes.SMW}}" max="{{sim.soil_attributes.SMFCF}}" id="sm-slider"
+                           aria-label="Soil moisture" name="sm-slider"></md-slider>
+
+                <md-input-container>
+                  <input flex type="number" ng-model="sim.soil_attributes.SM" name="sm-input" title="Soil moisture"
+                         step=0.01 min="{{sim.soil_attributes.SMW}}" max="{{sim.soil_attributes.SMFCF}}" aria-controls="sm-slider">
+                </md-input-container>
+              </md-slider-container>
+
+              <div style="margin-top: 50px;"></div>
+
+
+              <h3>Soil attributes</h3>
+              <div layout="row" layout-padding>
+                <md-slider-container flex>
+                  <md-input-container>
+                    <input flex type="number" ng-model="sim.soil_attributes.SMW" aria-label="Wilting point" title="smw-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="smw-slider">
+                  </md-input-container>
+
+                  <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.SMW" step="0.01" min="0.0" max="1.0" name="smw-slider"
+                             aria-label="Wilting point" id="smw-slider"></md-slider>
+
+                  <h5>Wilting point [cm3/cm3]</h5>
+                </md-slider-container>
+
+                <md-slider-container flex>
+                  <md-input-container>
+                    <input flex type="number" ng-model="sim.soil_attributes.SMFCF" aria-label="Field capacity" title="smcf-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="smcf-slider">
+                  </md-input-container>
+
+                  <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.SMFCF" step="0.01" min="0.0" max="1.0" name="smcf-slider"
+                             aria-label="Field capacity" id="smcf-slider"></md-slider>
+
+                  <h5>Field capacity [cm3/cm3]</h5>
+                </md-slider-container>
+
+                <md-slider-container flex>
+                  <md-input-container>
+                    <input flex type="number" ng-model="sim.soil_attributes.SM0" aria-label="Saturation" title="sm0-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="sm0-slider">
+                  </md-input-container>
+
+                  <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.SM0" step="0.01" min="0.0" max="1.0" name="sm0-slider"
+                             aria-label="Saturation" id="sm0-slider"></md-slider>
+
+                  <h5>Saturation [cm3/cm3]</h5>
+                </md-slider-container>
+
+                <md-slider-container flex>
+                  <md-input-container>
+                    <input flex type="number" ng-model="sim.soil_attributes.CRAIRC" aria-label="Critical air content" title="crairc-input"
+                           step="0.01" min="0.0" max="1.0" aria-controls="crairc-slider">
+                  </md-input-container>
+
+                  <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.CRAIRC" step="0.01" min="0.0" max="1.0" name="crairc-slider"
+                             aria-label="Critical air content" id="crairc-slider"></md-slider>
+
+                  <h5>Critical air content [cm3/cm3]</h5>
+                </md-slider-container>
+
+                <md-slider-container flex>
+                  <md-input-container>
+                    <input flex type="number" ng-model="sim.soil_attributes.RDMSOL" aria-label="Max rooting depth" title="rdmsol-input"
+                           aria-controls="rmdsol-slider">
+                  </md-input-container>
+
+                  <md-slider md-vertical class="md-accent" ng-model="sim.soil_attributes.RDMSOL" min="0" max="200" name="rdmsol-slider"
+                             aria-label="Max rooting depth" id="rmdsol-slider"></md-slider>
+
+                  <h5>Max rooting depth [m3]</h5>
+                </md-slider-container>
+              </div>
+
+            </md-content>
+        </md-tab>
+        <md-tab label="Weather">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+
+                <div>Currently the weather is picked automatically from <a href="https://power.larc.nasa.gov/">NASA POWER Database</a> based on the location of the simulation.
+
+                  <p>Note that the latest weather available is 2015.</p>
+
+                  In the future it is expected that you will be able to pick local weather from a nearby weather station, e.g.:
+                    <a target="_blank" href="https://www.juntadeandalucia.es/agriculturaypesca/ifapa/ria/servlet/FrontController">Estaciones Agroclimáticas Andalucía</a>
+
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="Crop">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+              <div layout="row" layout-wrap>
+
+                  <div flex="50">
+                    <span flex="50">Crop Species: </span>
+                  </div>
+                  <div flex="50">
+                    <md-select flex="50" ng-model="sim.crop_name" placeholder="Crop" class="md-no-underline"
+                               required md-no-asterisk="false" tabindex="1" name="crop_name">
+                      <md-option value="wheat">Wheat</md-option>
+                      <md-option value="maize">Maize</md-option>
+                      <md-option value="sunflower">Sunflower</md-option>
+                      <md-option value="barley">Barley</md-option>
+                    </md-select>
+                  </div>
+
+                  <div flex="30">
+                    <span class="md-body-1">Thermal time to Flowering</span>
+                  </div>
+                  <div flex="50">
+                    <md-slider md-discrete ng-model="sim.tsum1" step="10" min="500" max="1500" name="tsum1-slider"
+                               aria-label="sim.tsum1" aria-controls="tsum1-slider">
+                    </md-slider>
+                  </div>
+                  <div flex="10">
+                    <md-input-container>
+                      <input flex type="number" ng-model="sim.tsum1" name="tsum1-input"
+                             aria-label="sim.tsum1" aria-controls="tsum1-slider">
+                    </md-input-container>
+                  </div>
+
+                  <div flex="30">
+                    <span class="md-body-1">Thermal time to Maturity</span>
+                  </div>
+                  <div flex="50">
+                    <md-slider md-discrete ng-model="sim.tsum2" step="10" min="500" max="1500" name="tsum2-slider"
+                               aria-label="sim.tsum2" aria-controls="tsum2-slider">
+                    </md-slider>
+                  </div>
+                  <div flex="10">
+                    <md-input-container>
+                      <input flex type="number" ng-model="sim.tsum2" name="tsum2-input"
+                             aria-label="sim.tsum2" aria-controls="tsum2-slider">
+                    </md-input-container>
+                  </div>
+              </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="Management">
+            <md-content layout-padding
+                        md-swipe-left="next()"
+                        md-swipe-right="previous()">
+
+              <div flex-gt-xs layout="row">
+                <div flex-gt-xs>
+                  <h4>Start Date</h4>
+                  <md-datepicker ng-model="sim.start_date"
+                                 md-placeholder="Enter date"
+                                 tabindex="1" md-max-date="sim.max_sowing_date"
+                                 name="sim.start_date" md-current-view="year"></md-datepicker>
+                </div>
+
+                <div flex-gt-xs>
+                  <h4>Sowing Date</h4>
+                  <md-datepicker ng-model="sim.sowing_date"
+                                 md-placeholder="Enter date"
+                                 tabindex="2" md-max-date="sim.max_sowing_date"
+                                 name="sim.sowing_date" md-current-view="year"></md-datepicker>
+                </div>
+
+                <div flex-gt-xs>
+                  <h4>End Date</h4>
+                  <md-datepicker ng-model="sim.end_date"
+                                 md-placeholder="End date"
+                                 tabindex="3" md-max-date="sim.max_end_date"
+                                 name="sim.end_date" md-current-view="year"></md-datepicker>
+                </div>
+              </div>
+
+
+            </md-content>
+        </md-tab>
+        <md-tab label="Results" ng-if="sim.results_ok">
+            <md-content layout-padding
+                        md-swipe-right="previous()">
+
+              <div flex-gt-xs>
+                <h4>Plot Data</h4>
+                <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>
+              </div>
+            </md-content>
+    </md-tabs>
+    <md-content class="md-padding pad-top-0" layout="row" layout-margin>
+        <md-button class="md-primary"
+                   flex
+                   type="submit"
+                   ng-disabled="!simConfigForm.$valid || !simConfigForm.$dirty || isLoading"
+                   ng-click="run_simulation()">Run Simulation
+        </md-button>
+    </md-content>
+</form>
