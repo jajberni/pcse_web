@@ -7,6 +7,7 @@
 
       $scope.auth = gaAuthentication;
       console.log("Here we are...");
+      $scope.obj = {data: {"Array": [1, 2, 3], "Boolean": true}, options: {mode: 'tree'}};
 
       $scope.hasAuthorization = function() {
         return $scope.auth.isLogged();

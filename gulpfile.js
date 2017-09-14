@@ -60,7 +60,8 @@
             'lib/ngmap/build/scripts/ng-map.js',
             'lib/d3/d3.js',
             'lib/nvd3/build/nv.d3.js',
-            'lib/angular-nvd3/dist/angular-nvd3.js'
+            'lib/angular-nvd3/dist/angular-nvd3.js',
+            'lib/angular-jsoneditor/dist/angular-jsoneditor.js'
         ],
         scripts : [
             'application.js',

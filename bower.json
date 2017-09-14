@@ -19,7 +19,8 @@
     "angular-moment": "~1.0.1",
     "ng-file-upload": "~12.2.13",
     "moment-timezone": "~0.5.13",
-    "angular-nvd3": "^1.0.9"
+    "angular-nvd3": "^1.0.9",
+    "angular-jsoneditor": "git://github.com/vonZeppelin/angular-jsoneditor.git#v0.0.3"
 
   },
   "resolutions": {

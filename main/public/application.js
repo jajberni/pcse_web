@@ -19,7 +19,8 @@ var AppConfig = (function() {
         'angularMoment',
         'ngFileUpload',
         'ngMap',
-        'nvd3'
+        'nvd3',
+        'angular-jsoneditor'
     ];
 
     // Add a new vertical module
