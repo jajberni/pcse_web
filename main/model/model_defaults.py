@@ -251,10 +251,10 @@ default_crop = {'AMAXTB': [0.0, 35.83, 1.0, 35.83, 1.3, 35.83, 2.0, 4.48],
                 'TSUM2': 1000.0,
                 'TSUMEM': 0.0}
 
-default_amgt = [{datetime.date(2014, 9, 1): {'CropCalendar': {'crop_end_date': datetime.date(2015, 7, 1),
+default_amgt = [{'2014-09-01': {'CropCalendar': {'crop_end_date': '2015-07-01',
                                                               'crop_end_type': 'harvest',
                                                               'crop_name': 'wheat',
-                                                              'crop_start_date': datetime.date(2014, 10, 1),
+                                                              'crop_start_date': '2014-10-01',
                                                               'crop_start_type': 'sowing',
                                                               'max_duration': 330,
                                                               'variety_name': 'winter-wheat'},

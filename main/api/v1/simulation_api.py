@@ -36,11 +36,13 @@ class SimulationsAPI(Resource):
         total_count = total_count_future.get_result() if total_count_future else False
         return make_list_response(simulations, next_cursor, more, total_count)
 
+    @authorization_required
     def post(self):
         data = request.json
         print("POST: Received simulation data: ", data)
         sim = Simulation(**data)
         sim.update_simulation_results()
+        sim.owner_id = auth.current_user_key()
         sim.put()
         if auth.is_admin():
             properties = Simulation.get_private_properties()
@@ -49,11 +51,13 @@ class SimulationsAPI(Resource):
 
         return sim.to_dict(include=properties)
 
+    @authorization_required
     def put(self):
         data = request.json
         print("PUT: Received simulation data: ", data)
         sim = Simulation(**data)
         sim.update_simulation_results()
+        sim.owner_id = auth.current_user_key()
         sim.put()
         if auth.is_admin():
             properties = Simulation.get_private_properties()
@@ -82,7 +86,7 @@ class SimulationByKeyAPI(Resource):
     def put(self, key):
         """Updates simulation's properties"""
         update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date',
-                             'crop_name', 'sowing_date', 'tsum1', 'tsum2']
+                             'crop_attributes', 'site_attributes', 'amgt_attributes', 'crop_name', 'sowing_date']
         if auth.is_admin():
             update_properties += ['owner_id']
 
@@ -104,7 +108,7 @@ class SimulationByKeyAPI(Resource):
     def post(self, key):
         """Updates simulation's properties"""
         update_properties = ['name', 'description', 'location', 'soil_attributes', 'start_date', 'end_date',
-                             'crop_name', 'sowing_date', 'tsum1', 'tsum2']
+                             'crop_attributes', 'site_attributes', 'amgt_attributes', 'crop_name', 'sowing_date']
         if auth.is_admin():
             update_properties += ['owner_id']
 
@@ -131,5 +135,5 @@ class SimulationByKeyAPI(Resource):
 class SimulationNew(Resource):
     def get(self):
         new_sim = Simulation(name='New Simulation')
-        properties = Simulation.get_private_properties()
+        properties = Simulation.get_public_properties()
         return new_sim.to_dict(include=properties)

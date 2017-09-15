@@ -17,6 +17,10 @@
                            name="description"
                            ></textarea>
                 </md-input-container>
+              
+              <div>
+                <angular-jsoneditor ng-model="sim.site_attributes" options="obj.options" style="width: 100%; height: 400px;"></angular-jsoneditor>
+              </div>
 
             </md-content>
         </md-tab>
@@ -178,13 +182,13 @@
                     <span class="md-body-1">Thermal time to Flowering</span>
                   </div>
                   <div flex="50">
-                    <md-slider md-discrete ng-model="sim.tsum1" step="10" min="500" max="1500" name="tsum1-slider"
+                    <md-slider md-discrete ng-model="sim.crop_attributes.TSUM1" step="10" min="500" max="1500" name="tsum1-slider"
                                aria-label="sim.tsum1" aria-controls="tsum1-slider">
                     </md-slider>
                   </div>
                   <div flex="10">
                     <md-input-container>
-                      <input flex type="number" ng-model="sim.tsum1" name="tsum1-input"
+                      <input flex type="number" ng-model="sim.crop_attributes.TSUM1" name="tsum1-input"
                              aria-label="sim.tsum1" aria-controls="tsum1-slider">
                     </md-input-container>
                   </div>
@@ -193,19 +197,25 @@
                     <span class="md-body-1">Thermal time to Maturity</span>
                   </div>
                   <div flex="50">
-                    <md-slider md-discrete ng-model="sim.tsum2" step="10" min="500" max="1500" name="tsum2-slider"
+                    <md-slider md-discrete ng-model="sim.crop_attributes.TSUM2" step="10" min="500" max="1500" name="tsum2-slider"
                                aria-label="sim.tsum2" aria-controls="tsum2-slider">
                     </md-slider>
                   </div>
                   <div flex="10">
                     <md-input-container>
-                      <input flex type="number" ng-model="sim.tsum2" name="tsum2-input"
+                      <input flex type="number" ng-model="sim.crop_attributes.TSUM2" name="tsum2-input"
                              aria-label="sim.tsum2" aria-controls="tsum2-slider">
                     </md-input-container>
                   </div>
               </div>
+
+              <div>
+                <angular-jsoneditor ng-model="sim.crop_attributes" options="obj.options" style="width: 100%; height: 400px;"></angular-jsoneditor>
+              </div>
+
             </md-content>
         </md-tab>
+
         <md-tab label="Management">
             <md-content layout-padding
                         md-swipe-left="next()"
@@ -237,6 +247,9 @@
                 </div>
               </div>
 
+              <div>
+                <angular-jsoneditor ng-model="sim.amgt_attributes" options="obj.options" style="width: 100%; height: 400px;"></angular-jsoneditor>
+              </div>
 
             </md-content>
         </md-tab>

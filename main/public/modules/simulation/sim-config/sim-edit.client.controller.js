@@ -25,8 +25,6 @@
                 $scope.sim = $scope.simulation.clone();
                 //$log.debug($scope.sim);
 
-                $scope.soil_attributes = $scope.sim.soil_attributes;
-
                 $scope.getCurrentLocation = function(event){
                   $scope.sim.location.lat = event.latLng.lat();
                   $scope.sim.location.lon = event.latLng.lng();

@@ -19,7 +19,53 @@ from operator import itemgetter
 
 from .model_defaults import default_amgt, default_crop, default_site, default_soil
 
-soil_defaults = {'SMW': 0.3, 'SMFCF': 0.46, 'SM0': 0.57, 'CRAIRC': 0.05, 'RDMSOL': 0.45}
+import re
+
+datetime_format_regex = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+datetime_format = "%Y-%m-%d"
+
+
+def datetime_parser(lst):
+  new_lst = []
+  for dct in lst:
+    for k, v in dct.items():
+        if isinstance(v, basestring) and datetime_format_regex.match(v):
+            dct[k] = parse(v).date()
+        if isinstance(k, basestring) and datetime_format_regex.match(k):
+            val = dct.pop(k)
+            dct[parse(k).date()] = val
+    lst.append(dct)
+  return new_lst
+
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+    if isinstance(obj, (dt.datetime, dt.date)):
+      return obj.isoformat()
+    raise TypeError("Type %s not serializable" % type(obj))
+
+
+def json_timestamp(obj):
+  if isinstance(obj, (dt.datetime, dt.date)):
+    return int(time.mktime(obj.timetuple()))
+  raise TypeError("Type %s not serializable" % type(obj))
+
+
+def fuzzydate_to_timestamp(obj):
+  return time.mktime(is_date(None, obj).timetuple())
+
+
+def dictRecursiveFormat(d):
+    for key, val in list(d.items()):
+        if isinstance(key, dt.date):
+            val = d.pop(key)
+            d[str(key)] = val
+        if isinstance(val, dt.date) and isinstance(key, dt.date):
+            d[str(key)] = str(val)
+        elif isinstance(val, dt.date):
+            d[key] = str(val)
+        if type(val) is dict:
+            dictRecursiveFormat(val)
 
 class SimulationValidator(model.BaseValidator):
   """Defines how to create validators for simulation properties. For detailed description see BaseValidator"""
@@ -102,6 +148,9 @@ class Simulation(model.Base):
   description = ndb.StringProperty(default="Demo simulation", validator=SimulationValidator.create('description'))
   location = DictGeoPt(default=GeoPt(37.4, -4.03))
   soil_attributes = ndb.JsonProperty(default=default_soil)
+  crop_attributes = ndb.JsonProperty(default=default_crop)
+  site_attributes = ndb.JsonProperty(default=default_site)
+  amgt_attributes = ndb.JsonProperty(default=default_amgt)
   start_date = StringDateProperty(default=dt.date(2014, 9, 1))
   sowing_date = StringDateProperty(default=dt.date(2014, 10, 1))
   end_date = StringDateProperty(default=dt.date(2015, 7, 1))
@@ -118,7 +167,8 @@ class Simulation(model.Base):
   simulation_dict = {}
 
   PUBLIC_PROPERTIES = ['name', 'description', 'location', 'results_ok', 'plot_data',
-                       'soil_attributes', 'start_date', 'sowing_date', 'end_date', 'crop_name', 'tsum1', 'tsum2']
+                       'soil_attributes', 'crop_attributes', 'site_attributes', 'amgt_attributes', 'start_date',
+                       'sowing_date', 'end_date', 'crop_name', 'tsum1', 'tsum2']
 
   PRIVATE_PROPERTIES = ['owner_id']
 
@@ -173,10 +223,10 @@ class Simulation(model.Base):
         self.wdp.description = self.weather_data['description']
         self.wdp.ETmodel = self.weather_data['ETmodel']
     print(self.wdp)
-    amgt = default_amgt
-    soil = default_soil
-    site = default_site
-    crop = default_crop
+    amgt = datetime_parser(self.amgt_attributes)
+    soil = self.soil_attributes
+    site = self.site_attributes
+    crop = self.crop_attributes
 
     amgt[0][self.start_date] = amgt[0].pop(amgt[0].keys()[0])
 
@@ -184,9 +234,9 @@ class Simulation(model.Base):
     amgt[0][self.start_date]['CropCalendar']['crop_end_date'] = self.end_date
 
     parvalues = ParameterProvider(sitedata=site, soildata=soil, cropdata=crop)
-    crop['TSUM1'] = self.tsum1
-    crop['TSUM2'] = self.tsum2
-    soil.update(self.soil_attributes)
+    #crop['TSUM1'] = self.tsum1
+    #crop['TSUM2'] = self.tsum2
+    #soil.update(self.soil_attributes)
     wofsim = Wofost71_WLP_FD(parvalues, self.wdp, agromanagement=amgt)
     wofsim.run_till_terminate()
     output = wofsim.get_output()
@@ -207,19 +257,3 @@ class Simulation(model.Base):
     # else filter for private True and False
     return qry
 
-
-def json_serial(obj):
-    """JSON serializer for objects not serializable by default json code"""
-    if isinstance(obj, (dt.datetime, dt.date)):
-      return obj.isoformat()
-    raise TypeError("Type %s not serializable" % type(obj))
-
-
-def json_timestamp(obj):
-  if isinstance(obj, (dt.datetime, dt.date)):
-    return int(time.mktime(obj.timetuple()))
-  raise TypeError("Type %s not serializable" % type(obj))
-
-
-def fuzzydate_to_timestamp(obj):
-  return time.mktime(is_date(None, obj).timetuple())
