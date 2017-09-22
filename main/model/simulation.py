@@ -37,6 +37,7 @@ def datetime_parser(lst):
     new_lst.append(dct)
   return new_lst
 
+
 def datetime_deparser(dct):
   for k, v in dct.items():
     if isinstance(v, dict):
@@ -46,6 +47,7 @@ def datetime_deparser(dct):
     if isinstance(k, dt.date) or isinstance(k, dt.datetime):
         val = dct.pop(k)
         dct[k.isoformat()] = val
+
 
 def lst_datetime_deparser(lst):
   new_lst = []
@@ -201,6 +203,7 @@ class Simulation(model.Base):
                          'description': self.wdp.description,
                          'ETmodel': self.wdp.ETmodel}
     self.results_ok = True
+    print(lst_datetime_deparser(self.amgt_attributes))
 
   def plot_dict(self):
     ts = map(fuzzydate_to_timestamp, self.simulation_dict.keys())

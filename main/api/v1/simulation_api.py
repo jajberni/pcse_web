@@ -14,7 +14,7 @@ from api.helpers import ArgumentValidator, make_list_response,\
         make_empty_ok_response, default_parser, to_compare_date
 from flask import request, g
 from pydash import _
-from api.decorators import model_by_key, simulation_by_name, authorization_required, admin_required
+from api.decorators import model_by_key, simulation_by_name, authorization_required, admin_required, login_required
 
 
 @API.resource('/api/v1/simulations')
@@ -36,13 +36,13 @@ class SimulationsAPI(Resource):
         total_count = total_count_future.get_result() if total_count_future else False
         return make_list_response(simulations, next_cursor, more, total_count)
 
-    @authorization_required
+    @login_required
     def post(self):
         data = request.json
         print("POST: Received simulation data: ", data)
         sim = Simulation(**data)
         sim.update_simulation_results()
-        sim.owner_id = auth.current_user_key()
+        sim.owner_id = auth.current_user_db().username
         sim.put()
         if auth.is_admin():
             properties = Simulation.get_private_properties()
@@ -51,13 +51,13 @@ class SimulationsAPI(Resource):
 
         return sim.to_dict(include=properties)
 
-    @authorization_required
+    @login_required
     def put(self):
         data = request.json
         print("PUT: Received simulation data: ", data)
         sim = Simulation(**data)
         sim.update_simulation_results()
-        sim.owner_id = auth.current_user_key()
+        sim.owner_id = auth.current_user_db().username
         sim.put()
         if auth.is_admin():
             properties = Simulation.get_private_properties()
