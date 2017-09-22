@@ -101,6 +101,7 @@ class SimulationByKeyAPI(Resource):
             properties = Simulation.get_private_properties()
         else:
             properties = Simulation.get_public_properties()
+        print("SAVE PUT: done!")
         return g.model_db.to_dict(include=properties)
 
     @authorization_required
@@ -115,7 +116,11 @@ class SimulationByKeyAPI(Resource):
         new_data = _.pick(request.json, update_properties)
         print("SAVE POST: Received simulation data: ", new_data)
         g.model_db.populate(**new_data)
-        g.model_db.put()
+        try:
+          g.model_db.update_simulation_results()
+          g.model_db.put()
+        except Exception as ex:
+          print(ex)
         #return make_empty_ok_response()
         if auth.is_admin():
             properties = Simulation.get_private_properties()

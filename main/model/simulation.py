@@ -8,7 +8,6 @@ import model
 import time
 
 from pcse.db import NASAPowerWeatherDataProvider
-from pcse.fileinput import CABOFileReader
 from pcse.base_classes import ParameterProvider, WeatherDataProvider
 from pcse.models import Wofost71_WLP_FD
 import datetime as dt
@@ -27,6 +26,7 @@ datetime_format = "%Y-%m-%d"
 
 def datetime_parser(lst):
   new_lst = []
+  print("datetime parser: ", lst)
   for dct in lst:
     for k, v in dct.items():
         if isinstance(v, basestring) and datetime_format_regex.match(v):
@@ -34,9 +34,25 @@ def datetime_parser(lst):
         if isinstance(k, basestring) and datetime_format_regex.match(k):
             val = dct.pop(k)
             dct[parse(k).date()] = val
-    lst.append(dct)
+    new_lst.append(dct)
   return new_lst
 
+def datetime_deparser(dct):
+  for k, v in dct.items():
+    if isinstance(v, dict):
+      v = datetime_deparser(v)
+    if isinstance(v, dt.date) or isinstance(v, dt.datetime):
+        dct[k] = v.isoformat()
+    if isinstance(k, dt.date) or isinstance(k, dt.datetime):
+        val = dct.pop(k)
+        dct[k.isoformat()] = val
+
+def lst_datetime_deparser(lst):
+  new_lst = []
+  for dct in lst:
+    new_dct = datetime_deparser(dct)
+    new_lst.append(new_dct)
+  return new_lst
 
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
@@ -240,6 +256,8 @@ class Simulation(model.Base):
     wofsim = Wofost71_WLP_FD(parvalues, self.wdp, agromanagement=amgt)
     wofsim.run_till_terminate()
     output = wofsim.get_output()
+
+    print("Simulation completed!")
 
     results_dict = {}
     for a in output:
