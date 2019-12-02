@@ -4,7 +4,7 @@ Flask-OAuthlib==0.9.2
 Flask-RESTful==0.3.5
 oauthlib==1.1.1
 pydash==2.4.2
-Werkzeug==0.11.9
+Werkzeug==0.15.3
 Faker==0.7.18
 factory_boy==2.9.2
 factoryboy-gaendb==0.1.5
